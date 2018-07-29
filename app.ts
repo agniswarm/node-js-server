@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 import userRoutes from './api/routes/user'
+import Response from './api/response';
 const mongodbURL: string = 'mongodb+srv://' + process.env.MONGO_ID + ':' + process.env.MONGO_PASSWORD + '@testcluster-trljw.mongodb.net/test?retryWrites=true'
 const app = express();
 
@@ -32,19 +33,16 @@ app.use('/products', productRoutes);
 
 //Error Middlewares
 app.use((req, res, next) => {
-    let error: any = new Error('Not Found');
+    let error: any = new Error('Page Not Found');
     error.status = 404;
     next(error)
 });
 
 app.use((error: any, req: any, res: any, next: any) => {
+    var response = new Response();
     res.status(error.status || 500);
-    res.json({
-        origin: 'app',
-        error: {
-            message: error.message
-        }
-    })
+    response.error.push(error.message);
+    res.json(response)
 });
 
 export default app;

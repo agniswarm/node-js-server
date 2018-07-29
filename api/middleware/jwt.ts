@@ -7,7 +7,6 @@ var valid = (req: any, res: any, next: any) => {
         var token: any = req.headers.authorization.split(' ')[1];
         var decoded = jwt.verify(token, String(process.env.SECRET_KEY));
         req.userData = decoded;
-        console.log(req)
         next();
     }
     catch (error) {
