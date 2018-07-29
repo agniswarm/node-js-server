@@ -5,6 +5,7 @@ import productRoutes from './api/routes/products';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
+import userRoutes from './api/routes/user'
 const mongodbURL: string = 'mongodb+srv://' + process.env.MONGO_ID + ':' + process.env.MONGO_PASSWORD + '@testcluster-trljw.mongodb.net/test?retryWrites=true'
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/uploads', express.static('uploads'))
 app.use(morgan('dev'))
 
 //Router Middlewares
+app.use('/users', userRoutes)
 app.use('/orders', ordersRoutes);
 app.use('/products', productRoutes);
 

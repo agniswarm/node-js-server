@@ -3,11 +3,11 @@ import mongoose from 'mongoose';
 import Orders from '../models/order';
 import Products from '../models/product';
 import Response from '../response';
-import Product from '../models/product';
+import checkAuth from '../middleware/jwt';
 
 const app = express.Router();
 
-app.get('/', (req, res, next) => {
+app.get('/', checkAuth, (req, res, next) => {
     var response = new Response();
     Orders
         .find()
@@ -30,7 +30,7 @@ app.get('/', (req, res, next) => {
         })
 })
 
-app.post('/', (req, res, next) => {
+app.post('/', checkAuth, (req, res, next) => {
     var response = new Response();
     Products
         .findById(req.body.productId)
@@ -63,7 +63,7 @@ app.post('/', (req, res, next) => {
 });
 
 
-app.get('/:id', (req, res, next) => {
+app.get('/:id', checkAuth, (req, res, next) => {
     var response = new Response();
     Orders.findById(req.params.id)
         .populate('product', 'name price _id')
@@ -83,7 +83,7 @@ app.get('/:id', (req, res, next) => {
             res.status(500).json(response)
         })
 });
-app.delete('/:id', (req, res, next) => {
+app.delete('/:id', checkAuth, (req, res, next) => {
     var response = new Response();
     Orders.findByIdAndRemove(req.params.id)
         .select("_id product quantity")
